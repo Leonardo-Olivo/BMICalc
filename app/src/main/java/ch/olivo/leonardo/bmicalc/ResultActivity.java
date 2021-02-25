@@ -7,6 +7,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import ch.olivo.leonardo.bmicalc.enums.BMIClasses;
+import ch.olivo.leonardo.bmicalc.service.BMIService;
 
 public class ResultActivity extends AppCompatActivity {
 
@@ -14,17 +15,26 @@ public class ResultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
+        BMIService bmiService = new BMIService();
+
 
         Intent incomingIntent = getIntent();
-        double result = incomingIntent.getDoubleExtra("result", 0);
+        double weight = incomingIntent.getDoubleExtra("weight", 0);
+        double height = incomingIntent.getDoubleExtra("height", 0);
+        double result = bmiService.calculateBMI(weight, height);
         result = Math.round(result * 100.0) / 100.0;
 
-        BMIClasses bmiClass = (BMIClasses) incomingIntent.getSerializableExtra("BMIClass");
+        BMIClasses bmiClass = bmiService.findBMIClass(result);
 
         TextView resultView = findViewById(R.id.resultText);
         resultView.setText(String.valueOf(result));
 
         TextView classView = findViewById(R.id.resultClass);
-        classView.setText(bmiClass.getDisplayName());
+
+        if (bmiClass == null) {
+            classView.setText(R.string.Error);
+        } else {
+            classView.setText(bmiClass.getDisplayName());
+        }
     }
 }

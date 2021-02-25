@@ -6,4 +6,5 @@
     <string name="Title">BMI Calculator</string>
     <string name="BMI">BMI</string>
     <string name="bmi_class">BMI Class</string>
+    <string name="Error">There was some kind of error</string>
 </resources>
